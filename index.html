@@ -496,12 +496,12 @@ let SNOW = null;
   const hsFrame = toon(0x3a3f47);
   aisleSigns.forEach((s, i) => {
     const parts = [];
-    parts.push(cyl(interior, 0.02, 0.02, 1.96, hsFrame, s.x - 0.9, 5.32, -1.35));
-    parts.push(cyl(interior, 0.02, 0.02, 1.96, hsFrame, s.x + 0.9, 5.32, -1.35));
+    parts.push(cyl(interior, 0.02, 0.02, 2.22, hsFrame, s.x - 0.9, 5.19, -1.35));
+    parts.push(cyl(interior, 0.02, 0.02, 2.22, hsFrame, s.x + 0.9, 5.19, -1.35));
     const hsTex = framedTex(s.main, s.sub, s.bg, 512, 176, 92);
     const hsMat = new THREE.MeshBasicMaterial({ map: hsTex });
-    parts.push(pnl(interior, 2.6, 0.72, hsMat, s.x, 3.98, -1.31, 0, 0));
-    parts.push(pnl(interior, 2.6, 0.72, hsMat, s.x, 3.98, -1.39, 0, Math.PI));
+    parts.push(pnl(interior, 2.6, 0.72, hsMat, s.x, 3.72, -1.31, 0, 0));
+    parts.push(pnl(interior, 2.6, 0.72, hsMat, s.x, 3.72, -1.39, 0, Math.PI));
     parts.forEach(pt => reg(pt, 2.12 + i * 0.08));
   });
 
