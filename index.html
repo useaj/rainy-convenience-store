@@ -500,7 +500,7 @@ let SNOW = null;
     const hsMat = new THREE.MeshBasicMaterial({ map: hsTex });
     parts.push(pnl(group, 2.6, 0.72, hsMat, s.x, 4.85, -4.36, 0, 0));
     parts.push(pnl(group, 2.6, 0.72, hsMat, s.x, 4.85, -4.44, 0, Math.PI));
-    reg(parts, 2.12 + i * 0.08);
+    parts.forEach(pt => reg(pt, 2.12 + i * 0.08));
   });
 
   const counterGroup = new THREE.Group();
