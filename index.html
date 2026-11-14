@@ -414,7 +414,7 @@ let SNOW = null;
         const bz = z1 + 0.45 + i*((aisleLen-0.9)/8);
         const cidx = ((i*7 + ai*3 + layer)%8 + 8)%8;
         const itemMat = toon(palette[cidx]);
-        const item = box(group,0.4,0.7,0.55,itemMat,ax,bz,ly+0.35);
+        const item = box(group,0.4,0.7,0.55,itemMat,ax,ly+0.35,bz);
         item.rotation.x = (i%3)*0.08;
         reg(item,1.55 + ai*0.05 + layer*0.06 + i*0.015);
       }
@@ -875,7 +875,7 @@ function buildSnow() {
   scene.add(SNOW);
   SNOW.frustumCulled = false;
   SNOW.userData.update = function(dt, t) {
-    this.children.forEach(points => {
+    SNOW.children.forEach(points => {
       const geo = points.geometry;
       const pos = geo.attributes.position.array;
       const data = geo.userData;
