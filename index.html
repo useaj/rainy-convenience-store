@@ -544,14 +544,7 @@ let SNOW = null;
   const coffeeLight = box(counterGroup,0.12,0.08,0.12,glowMat(0xff3b3b),7.2,1.82,0.46);
   reg(coffeeLight,1.74);
 
-  const poster1Tex = framedTex('特价','每日特价 · 限量','#c0392b',512,360,150);
-  const poster2Tex = framedTex('新品','本周上新','#2456c8',512,360,150);
-  const poster3Tex = framedTex('关东煮','热乎现煮','#e67e22',512,360,128);
   const poster4Tex = framedTex('面包','新鲜出炉','#27ae60',512,360,150);
-  const p1 = pnl(interior,1.4,1.0,new THREE.MeshBasicMaterial({map:poster1Tex}),-5,2.0,1.55,0,0);
-  const p2 = pnl(interior,1.4,1.0,new THREE.MeshBasicMaterial({map:poster2Tex}),-2,2.0,1.55,0,0);
-  const p3 = pnl(interior,1.4,1.0,new THREE.MeshBasicMaterial({map:poster3Tex}),4.6,2.0,1.55,0,0);
-  reg(p1,1.8); reg(p2,1.82); reg(p3,1.84);
   const p4 = pnl(interior,1.4,1.0,new THREE.MeshBasicMaterial({map:poster4Tex}),7.95,2.0,-3.5,0,-Math.PI/2);
   reg(p4,1.86);
 
@@ -771,7 +764,7 @@ span(20.5, 7.9, -12, 6, 7.4, -4, 0.9);
   PLN(sign, 2.8, 0.9, signMat2, 0, 2.62, 0.04, 0, 0);
   PLN(sign, 2.8, 0.9, signMat2, 0, 2.62, -0.04, 0, Math.PI);
   sign.position.set(8.8, 0, 8.8);
-  sign.rotation.y = Math.PI / 4;
+  sign.rotation.y = 0;
   scene.add(sign);
   reg(sign, delayReg(7, 10));
 
