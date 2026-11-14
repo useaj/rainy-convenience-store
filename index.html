@@ -168,6 +168,23 @@ let SNOW = null;
       return tex;
     }
 
+    function framedTex(main, sub, bg, w = 512, h = 320, mainPx = 120) {
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = bg; ctx.fillRect(0, 0, w, h);
+      ctx.strokeStyle = '#ffffff'; ctx.lineWidth = Math.max(6, h * 0.045);
+      const mg = h * 0.07; ctx.strokeRect(mg, mg, w - 2 * mg, h - 2 * mg);
+      ctx.fillStyle = '#ffffff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.font = `bold ${mainPx}px sans-serif`;
+      ctx.fillText(main, w / 2, sub ? h * 0.40 : h * 0.52);
+      if (sub) { ctx.font = `${Math.round(mainPx * 0.42)}px sans-serif`; ctx.fillText(sub, w / 2, h * 0.75); }
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.anisotropy = 4;
+      return tex;
+    }
+
     function buildBase() {
       B(scene, 44, 1.6, 44, toon(0x2c3145), 0, -0.8, 0);
 
@@ -426,7 +443,7 @@ let SNOW = null;
         reg(item,1.55 + ai*0.05 + layer*0.06 + i*0.015);
       }
     }
-    const price = box(group,aisleW-0.2,0.1,aisleLen-0.4,toon(0xffffff),ax,3.68,aisleZc);
+    const price = box(group,aisleW-0.2,0.1,aisleLen-0.4,toon(0xffe066),ax,3.68,aisleZc);
     reg(price,1.75 + ai*0.06);
   });
 
@@ -464,10 +481,27 @@ let SNOW = null;
     }
   }
 
-  const bannerTex = textTex('冰镇冷饮','#ffffff','#2456c8',1024,128,72);
+  const bannerTex = framedTex('冰镇冷饮','冷藏饮料 · 冰爽一夏','#2456c8',1024,128,72);
   const bannerMat = new THREE.MeshBasicMaterial({map:bannerTex});
   const banner = pnl(interior,10,1.25,bannerMat,0,4.3,-7.6,0,0);
   reg(banner,2.05);
+
+  // 吊牌：三条通道上方分类牌（双面、白边框）
+  const aisleSigns = [
+    { x: -4.6, main: '零食', sub: 'SNACKS', bg: '#e67e22' },
+    { x: 0, main: '面包', sub: 'BAKERY', bg: '#27ae60' },
+    { x: 4.6, main: '日用品', sub: 'DAILY GOODS', bg: '#8e44ad' }
+  ];
+  aisleSigns.forEach((s, i) => {
+    const parts = [];
+    parts.push(cyl(group, 0.02, 0.02, 1.1, frameMat, s.x - 0.9, 5.75, -4.4));
+    parts.push(cyl(group, 0.02, 0.02, 1.1, frameMat, s.x + 0.9, 5.75, -4.4));
+    const hsTex = framedTex(s.main, s.sub, s.bg, 512, 176, 92);
+    const hsMat = new THREE.MeshBasicMaterial({ map: hsTex });
+    parts.push(pnl(group, 2.6, 0.72, hsMat, s.x, 4.85, -4.36, 0, 0));
+    parts.push(pnl(group, 2.6, 0.72, hsMat, s.x, 4.85, -4.44, 0, Math.PI));
+    reg(parts, 2.12 + i * 0.08);
+  });
 
   const counterGroup = new THREE.Group();
   interior.add(counterGroup);
@@ -508,10 +542,10 @@ let SNOW = null;
   const coffeeLight = box(counterGroup,0.12,0.08,0.12,glowMat(0xff3b3b),7.2,1.82,0.46);
   reg(coffeeLight,1.74);
 
-  const poster1Tex = textTex('特价','#ffffff','#c0392b',256,180,56);
-  const poster2Tex = textTex('新品','#ffffff','#2456c8',256,180,56);
-  const poster3Tex = textTex('关东煮','#ffffff','#e67e22',256,180,56);
-  const poster4Tex = textTex('面包','#ffffff','#27ae60',256,180,56);
+  const poster1Tex = framedTex('特价','每日特价 · 限量','#c0392b',512,360,150);
+  const poster2Tex = framedTex('新品','本周上新','#2456c8',512,360,150);
+  const poster3Tex = framedTex('关东煮','热乎现煮','#e67e22',512,360,128);
+  const poster4Tex = framedTex('面包','新鲜出炉','#27ae60',512,360,150);
   const p1 = pnl(interior,1.4,1.0,new THREE.MeshBasicMaterial({map:poster1Tex}),-5,2.0,1.55,0,0);
   const p2 = pnl(interior,1.4,1.0,new THREE.MeshBasicMaterial({map:poster2Tex}),-2,2.0,1.55,0,0);
   const p3 = pnl(interior,1.4,1.0,new THREE.MeshBasicMaterial({map:poster3Tex}),4.6,2.0,1.55,0,0);
