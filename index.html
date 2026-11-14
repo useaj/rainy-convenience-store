@@ -489,19 +489,19 @@ let SNOW = null;
 
   // 吊牌：三条通道上方分类牌（双面、白边框）
   const aisleSigns = [
-    { x: -4.6, main: '零食', sub: 'SNACKS', bg: '#e67e22' },
+    { x: -3.3, main: '零食', sub: 'SNACKS', bg: '#e67e22' },
     { x: 0, main: '面包', sub: 'BAKERY', bg: '#27ae60' },
     { x: 4.6, main: '日用品', sub: 'DAILY GOODS', bg: '#8e44ad' }
   ];
   const hsFrame = toon(0x3a3f47);
   aisleSigns.forEach((s, i) => {
     const parts = [];
-    parts.push(cyl(interior, 0.02, 0.02, 2.22, hsFrame, s.x - 0.9, 5.19, -1.35));
-    parts.push(cyl(interior, 0.02, 0.02, 2.22, hsFrame, s.x + 0.9, 5.19, -1.35));
+    parts.push(cyl(interior, 0.02, 0.02, 2.60, hsFrame, s.x - 0.9, 5.00, -0.40));
+    parts.push(cyl(interior, 0.02, 0.02, 2.60, hsFrame, s.x + 0.9, 5.00, -0.40));
     const hsTex = framedTex(s.main, s.sub, s.bg, 512, 176, 92);
     const hsMat = new THREE.MeshBasicMaterial({ map: hsTex });
-    parts.push(pnl(interior, 2.6, 0.72, hsMat, s.x, 3.72, -1.31, 0, 0));
-    parts.push(pnl(interior, 2.6, 0.72, hsMat, s.x, 3.72, -1.39, 0, Math.PI));
+    parts.push(pnl(interior, 2.6, 0.72, hsMat, s.x, 3.34, -0.36, 0, 0));
+    parts.push(pnl(interior, 2.6, 0.72, hsMat, s.x, 3.34, -0.44, 0, Math.PI));
     parts.forEach(pt => reg(pt, 2.12 + i * 0.08));
   });
 
