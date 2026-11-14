@@ -31,7 +31,7 @@
   <button data-w="rain" class="on">雨夜</button>
   <button data-w="sunset">夕阳</button>
   <button data-w="sunny">晴天</button>
-  <button data-w="cloudy">阴天</button>
+  <button data-w="cloudy">阴天</button><button data-w="snow">雪夜</button>
 </div>
   <script type="module">
     import * as THREE from 'three';
@@ -85,6 +85,7 @@
     const ASSEMBLY = [];
     const RIPPLES = [];
     let RAIN = null;
+let SNOW = null;
 
     let GRAD = null;
     function makeGrad() {
@@ -388,33 +389,38 @@
 
   const shelfMat = toon(0xe8e4da);
   const palette = [0xe74c3c,0xf39c12,0xf1c40f,0x27ae60,0x2980b9,0x9b59b6,0xff7fab,0xf5f5f5];
-  const shelfZ = [-1.5,-4,-6.5];
+  const aisleXs = [-4.6,0,4.6];
+  const aisleZc = -4.4;
+  const aisleLen = 6.4;
+  const aisleW = 1.4;
 
-  shelfZ.forEach((sz, si)=>{
+  aisleXs.forEach((ax, ai)=>{
     const group = new THREE.Group();
     interior.add(group);
-    const left = box(group,0.35,3.0,1.4,shelfMat,-5.5,1.6,sz);
-    const right = box(group,0.35,3.0,1.4,shelfMat,5.5,1.6,sz);
-    const back = box(group,11.0,3.0,0.08,shelfMat,0,1.6,sz-0.7);
-    reg(left,1.45 + si*0.08);
-    reg(right,1.45 + si*0.08);
-    reg(back,1.45 + si*0.08);
+    const z1 = aisleZc - aisleLen/2;
+    const z2 = aisleZc + aisleLen/2;
+    const sideL = box(group,0.35,3.0,aisleW,shelfMat,ax,1.6,z1);
+    const sideR = box(group,0.35,3.0,aisleW,shelfMat,ax,1.6,z2);
+    const back = box(group,0.08,3.0,aisleLen,shelfMat,ax-0.7,1.6,aisleZc);
+    reg(sideL,1.45 + ai*0.08);
+    reg(sideR,1.45 + ai*0.08);
+    reg(back,1.45 + ai*0.08);
 
     for(let layer=0; layer<4; layer++){
       const ly = 0.25 + layer*0.82;
-      const shelf = box(group,11.0,0.14,1.4,shelfMat,0,ly,sz);
-      reg(shelf,1.5 + si*0.06 + layer*0.05);
+      const shelf = box(group,aisleW,0.14,aisleLen,shelfMat,ax,ly,aisleZc);
+      reg(shelf,1.5 + ai*0.06 + layer*0.05);
       for(let i=0;i<9;i++){
-        const bx = -5.2 + i*1.22;
-        const cidx = ((i*7 + si*3 + layer)%8 + 8)%8;
+        const bz = z1 + 0.45 + i*((aisleLen-0.9)/8);
+        const cidx = ((i*7 + ai*3 + layer)%8 + 8)%8;
         const itemMat = toon(palette[cidx]);
-        const item = box(group,0.55,0.7,0.4,itemMat,bx,ly+0.35,sz);
-        item.rotation.y = (i%3)*0.08;
-        reg(item,1.55 + si*0.05 + layer*0.06 + i*0.015);
+        const item = box(group,0.4,0.7,0.55,itemMat,ax,bz,ly+0.35);
+        item.rotation.x = (i%3)*0.08;
+        reg(item,1.55 + ai*0.05 + layer*0.06 + i*0.015);
       }
     }
-    const price = box(group,10.6,0.1,0.25,toon(0xffffff),0,3.68,sz);
-    reg(price,1.75 + si*0.06);
+    const price = box(group,aisleW-0.2,0.1,aisleLen-0.4,toon(0xffffff),ax,3.68,aisleZc);
+    reg(price,1.75 + ai*0.06);
   });
 
   const fridgeGroup = new THREE.Group();
@@ -460,39 +466,39 @@
   interior.add(counterGroup);
   const counterMat = toon(0x8a6f4d);
   const counterTop = toon(0x5a4630);
-  const mainCounter = box(counterGroup,3.2,1.05,0.9,counterMat,-6.2,0.65,-0.3);
+  const mainCounter = box(counterGroup,3.2,1.05,0.9,counterMat,6.2,0.65,-0.3);
   reg(mainCounter,1.5);
-  const sideCounter = box(counterGroup,1.0,1.05,1.6,counterMat,-4.6,0.65,0.7);
+  const sideCounter = box(counterGroup,1.0,1.05,1.6,counterMat,4.6,0.65,0.7);
   reg(sideCounter,1.52);
-  const counterSurface = box(counterGroup,3.4,0.1,1.1,counterTop,-6.2,1.2,-0.3);
+  const counterSurface = box(counterGroup,3.4,0.1,1.1,counterTop,6.2,1.2,-0.3);
   reg(counterSurface,1.54);
-  const sideSurface = box(counterGroup,1.2,0.1,1.8,counterTop,-4.6,1.2,0.7);
+  const sideSurface = box(counterGroup,1.2,0.1,1.8,counterTop,4.6,1.2,0.7);
   reg(sideSurface,1.56);
 
-  const cashBase = box(counterGroup,0.7,0.25,0.5,toon(0x222831),-6.8,1.35,-0.3);
+  const cashBase = box(counterGroup,0.7,0.25,0.5,toon(0x222831),6.8,1.35,-0.3);
   reg(cashBase,1.58);
-  const screen = pnl(counterGroup,0.6,0.5,glowMat(0xbfefff),-6.8,1.6,-0.05,-0.3,0);
+  const screen = pnl(counterGroup,0.6,0.5,glowMat(0xbfefff),6.8,1.6,-0.05,-0.3,0);
   reg(screen,1.62);
 
-  const odenBox = box(counterGroup,1.2,0.55,0.7,glassMat,-5.7,1.5,-0.3);
+  const odenBox = box(counterGroup,1.2,0.55,0.7,glassMat,5.7,1.5,-0.3);
   reg(odenBox,1.64);
   for(let r=0;r<4;r++){
     for(let c=0;c<3;c++){
-      const cell = box(counterGroup,0.25,0.18,0.25,glowMat(0xffca7a),-5.95+c*0.3,1.62+r*0.15,-0.3);
+      const cell = box(counterGroup,0.25,0.18,0.25,glowMat(0xffca7a),5.95-c*0.3,1.62+r*0.15,-0.3);
       reg(cell,1.66 + r*0.02 + c*0.01);
     }
   }
 
-  const steamerBase = box(counterGroup,0.8,0.12,0.8,toon(0xd9b380),-6.6,1.35,-0.9);
+  const steamerBase = box(counterGroup,0.8,0.12,0.8,toon(0xd9b380),6.6,1.35,-0.9);
   reg(steamerBase,1.68);
   for(let t=0;t<3;t++){
-    const layerCyl = cyl(counterGroup,0.32,0.36,0.14,toon(0xd9b380),-6.6,1.5+t*0.16,-0.9,20);
+    const layerCyl = cyl(counterGroup,0.32,0.36,0.14,toon(0xd9b380),6.6,1.5+t*0.16,-0.9,20);
     reg(layerCyl,1.7 + t*0.03);
   }
 
-  const coffee = box(counterGroup,0.5,0.6,0.4,toon(0x333a45),-7.2,1.52,0.45);
+  const coffee = box(counterGroup,0.5,0.6,0.4,toon(0x333a45),7.2,1.52,0.45);
   reg(coffee,1.72);
-  const coffeeLight = box(counterGroup,0.12,0.08,0.12,glowMat(0xff3b3b),-7.2,1.82,0.46);
+  const coffeeLight = box(counterGroup,0.12,0.08,0.12,glowMat(0xff3b3b),7.2,1.82,0.46);
   reg(coffeeLight,1.74);
 
   const poster1Tex = textTex('特价','#ffffff','#c0392b',256,180,56);
@@ -501,7 +507,7 @@
   const poster4Tex = textTex('面包','#ffffff','#27ae60',256,180,56);
   const p1 = pnl(interior,1.4,1.0,new THREE.MeshBasicMaterial({map:poster1Tex}),-5,2.0,1.55,0,0);
   const p2 = pnl(interior,1.4,1.0,new THREE.MeshBasicMaterial({map:poster2Tex}),-2,2.0,1.55,0,0);
-  const p3 = pnl(interior,1.4,1.0,new THREE.MeshBasicMaterial({map:poster3Tex}),1,2.0,1.55,0,0);
+  const p3 = pnl(interior,1.4,1.0,new THREE.MeshBasicMaterial({map:poster3Tex}),4.6,2.0,1.55,0,0);
   reg(p1,1.8); reg(p2,1.82); reg(p3,1.84);
   const p4 = pnl(interior,1.4,1.0,new THREE.MeshBasicMaterial({map:poster4Tex}),7.95,2.0,-3.5,0,-Math.PI/2);
   reg(p4,1.86);
@@ -509,17 +515,17 @@
   const promoGroup = new THREE.Group();
   interior.add(promoGroup);
   const boxMat = toon(0xb08954);
-  const box1 = box(promoGroup,1.2,0.6,0.8,boxMat,3.3,0.45,0.7,0.25);
+  const box1 = box(promoGroup,1.2,0.6,0.8,boxMat,-3.3,0.45,0.7,0.25);
   reg(box1,1.7);
-  const box2 = box(promoGroup,1.1,0.55,0.75,boxMat,4.1,0.42,0.45,-0.3);
+  const box2 = box(promoGroup,1.1,0.55,0.75,boxMat,-4.1,0.42,0.45,-0.3);
   reg(box2,1.72);
-  const box3 = box(promoGroup,1.0,0.5,0.7,boxMat,3.8,0.4,1.0,0.5);
+  const box3 = box(promoGroup,1.0,0.5,0.7,boxMat,-3.8,0.4,1.0,0.5);
   reg(box3,1.74);
   const promoCols = [0xe74c3c,0xf39c12,0xf1c40f,0x27ae60,0x2980b9,0xff7fab];
   const pyraPos = [
-    [3.4,1.1,0.5],[3.9,1.1,0.3],[4.4,1.1,0.7],
-    [3.7,1.7,0.4],[4.2,1.7,0.6],
-    [4.0,2.3,0.5]
+    [-3.4,1.1,0.5],[-3.9,1.1,0.3],[-4.4,1.1,0.7],
+    [-3.7,1.7,0.4],[-4.2,1.7,0.6],
+    [-4.0,2.3,0.5]
   ];
   pyraPos.forEach((pos,i)=>{
     const item = box(promoGroup,0.55,0.5,0.4,toon(promoCols[i%6]),pos[0],pos[1],pos[2]);
@@ -529,11 +535,64 @@
   const basketGroup = new THREE.Group();
   interior.add(basketGroup);
   for(let b=0;b<5;b++){
-    const basket = box(basketGroup,0.5,0.28,0.36,toon(0x3b6fd4),-5.2+b*0.06,0.27+b*0.28,-1.4+b*0.05,0,b*0.05);
+    const basket = box(basketGroup,0.5,0.28,0.36,toon(0x3b6fd4),7.35,0.27+b*0.28,0.95+b*0.05,0,b*0.05);
     reg(basket,1.85 + b*0.03);
   }
+
+  const magRackGroup = new THREE.Group();
+  interior.add(magRackGroup);
+  const rackBase = box(magRackGroup,2.6,1.5,0.35,toon(0x8a6f4d),-5.7,1.0,1.12,0,-0.25);
+  reg(rackBase,1.7);
+  for(let r=0;r<2;r++){
+    for(let i=0;i<5;i++){
+      const mx = -6.6 + i*0.52;
+      const my = 1.32 + r*0.62;
+      const mz = 1.18 - r*0.3;
+      const mag = box(magRackGroup,0.42,0.58,0.04,toon(palette[(i+r*3)%8]),mx,my,mz,0,-0.25 + r*0.08);
+      reg(mag,1.72 + r*0.04 + i*0.02);
+    }
+  }
+
+  const barTopMat = toon(0xc49a6c);
+  const barGroup = new THREE.Group();
+  interior.add(barGroup);
+  const barTable = box(barGroup,5.0,0.06,0.5,barTopMat,-0.9,1.05,1.12);
+  reg(barTable,1.75);
+  for(let lx of [-2.5,0.7]){
+    const leg = box(barGroup,0.08,1.0,0.08,toon(0x5a4630),-0.9+lx,0.55,1.12);
+    reg(leg,1.77);
+  }
+  const stoolX = [-2.9,-1.7,-0.5,0.7];
+  stoolX.forEach((sx,si)=>{
+    const seat = cyl(barGroup,0.26,0.26,0.08,barTopMat,sx,0.68,0.45);
+    reg(seat,1.8 + si*0.03);
+    const stoolLeg = cyl(barGroup,0.05,0.05,0.6,toon(0x707882),sx,0.34,0.45);
+    reg(stoolLeg,1.81 + si*0.03);
+  });
+
+  const atmGroup = new THREE.Group();
+  interior.add(atmGroup);
+  const atmBody = box(atmGroup,0.9,1.5,0.6,toon(0x707882),-7.35,0.85,-7.5);
+  reg(atmBody,2.0);
+  const atmScreen = pnl(atmGroup,0.55,0.4,glowMat(0x9fe8ff),-7.35,1.05,-7.18);
+  reg(atmScreen,2.02);
+  const atmKeys = box(atmGroup,0.5,0.06,0.3,toon(0x3a4048),-7.35,0.72,-7.15);
+  reg(atmKeys,2.03);
+  const copier = box(atmGroup,0.7,0.5,0.5,toon(0xe8e8e8),-6.35,0.4,-7.5);
+  reg(copier,2.04);
+  const copierGlow = box(atmGroup,0.5,0.03,0.06,glowMat(0x7dffce),-6.35,0.67,-7.5);
+  reg(copierGlow,2.05);
+  const freezerGroup = new THREE.Group(); interior.add(freezerGroup);
+  const freezerBody = box(freezerGroup,0.9,0.85,3.2,toon(0x5a6270),7.35,0.55,-4.2);
+  reg(freezerBody,2.06);
+  const freezerGlowIn = box(freezerGroup,0.7,0.1,2.9,glowMat(0xdff4ff),7.35,0.95,-4.2);
+  reg(freezerGlowIn,2.07);
+  const freezerGlass = box(freezerGroup,0.95,0.05,3.25,glassMat,7.35,1.02,-4.2);
+  reg(freezerGlass,2.08);
+  const colors = [0xe74c3c,0x2980b9]; let z = -5.3, i = 0;
+  while (z <= -3.1) { const fb = box(freezerGroup,0.4,0.25,0.5,toon(colors[i%2]),7.35,0.82,z); reg(fb,2.09+i*0.02); z += 0.44; i++; }
 }
-    function buildProps() {
+function buildProps() {
   function delayReg(i, n) { return 2.1 + (i / Math.max(1, n - 1)) * 0.8; }
 
   // 自动贩卖机
@@ -777,6 +836,64 @@ function buildRain() {
   }
 }
 
+function buildSnow() {
+  const cv = document.createElement('canvas');
+  cv.width = cv.height = 64;
+  const ctx = cv.getContext('2d');
+  const g = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+  g.addColorStop(0, 'rgba(255,255,255,1)');
+  g.addColorStop(0.4, 'rgba(255,255,255,.55)');
+  g.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, 64, 64);
+  const tex = new THREE.CanvasTexture(cv);
+  const cfg = [{n:450,size:0.32,op:0.5,sp:1.0},{n:320,size:0.55,op:0.7,sp:1.5},{n:180,size:0.9,op:0.9,sp:2.1}];
+  SNOW = new THREE.Group();
+  SNOW.visible = false;
+  cfg.forEach(L => {
+    const pos = new Float32Array(L.n * 3);
+    const data = [];
+    for (let i = 0; i < L.n; i++) {
+      data.push({
+        bx: ((i * 137.51) % 46) - 23,
+        bz: ((i * 271.37) % 46) - 23,
+        y: (i * 61.7) % 26,
+        speed: L.sp * (0.7 + ((i * 29) % 10) * 0.06),
+        phase: (i * 47.3) % 6.283,
+        amp: 0.3 + ((i * 17) % 10) * 0.07,
+        swayF: 0.5 + ((i * 13) % 10) * 0.08
+      });
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    geo.userData = data;
+    const mat = new THREE.PointsMaterial({size:L.size,map:tex,transparent:true,opacity:L.op,depthWrite:false,sizeAttenuation:true,color:0xf4f8ff});
+    const points = new THREE.Points(geo, mat);
+    points.frustumCulled = false;
+    SNOW.add(points);
+  });
+  scene.add(SNOW);
+  SNOW.frustumCulled = false;
+  SNOW.userData.update = function(dt, t) {
+    this.children.forEach(points => {
+      const geo = points.geometry;
+      const pos = geo.attributes.position.array;
+      const data = geo.userData;
+      for (let i = 0; i < data.length; i++) {
+        const d = data[i];
+        d.y -= d.speed * dt;
+        if (d.y < 0) d.y += 26;
+        const idx = i * 3;
+        pos[idx] = d.bx + Math.sin(t * d.swayF + d.phase) * d.amp;
+        pos[idx + 1] = d.y;
+        pos[idx + 2] = d.bz + Math.cos(t * d.swayF * 0.8 + d.phase) * d.amp * 0.6;
+      }
+      geo.attributes.position.needsUpdate = true;
+    });
+  };
+  SNOW.userData.update(0, 0);
+}
+
 function animate() {
   requestAnimationFrame(animate);
   const dt = Math.min(clock.getDelta(), 0.05);
@@ -787,6 +904,7 @@ function animate() {
     it.obj.position.y = it.obj.userData.finalY - 6 * (1 - e);
   }
   if (RAIN && RAIN.userData && RAIN.userData.update) RAIN.userData.update(dt);
+  if (SNOW && SNOW.userData && SNOW.userData.update) SNOW.userData.update(dt, t);
   for (const rp of RIPPLES) {
     const s = (t * 0.8 + rp.phase) % 1;
     rp.mesh.scale.setScalar(0.4 + s * 2.4);
@@ -808,13 +926,15 @@ window.addEventListener('resize', function() {
     buildInterior();
     buildProps();
     buildRain();
+    buildSnow();
     animate();
 function setWeather(w){
   const P={
     rain:{bg:0x0a0e24,fogNear:55,fogFar:110,hemiSky:0x8fb4ff,hemiGround:0x1a1626,hemiInt:0.55,sunColor:0xa8c4ff,sunInt:0.7,sunPos:[-18,30,-12],rain:true,exposure:1.15},
     sunset:{bg:0x46305e,fogNear:50,fogFar:105,hemiSky:0xffb37a,hemiGround:0x33222e,hemiInt:0.5,sunColor:0xff9448,sunInt:1.35,sunPos:[-26,9,14],rain:false,exposure:1.1},
     sunny:{bg:0x8ec9ee,fogNear:70,fogFar:135,hemiSky:0xcfe8ff,hemiGround:0x5a6a4a,hemiInt:0.95,sunColor:0xfff3d6,sunInt:1.7,sunPos:[18,32,12],rain:false,exposure:1.0},
-    cloudy:{bg:0x767f8c,fogNear:38,fogFar:95,hemiSky:0xb8c2cc,hemiGround:0x3c4148,hemiInt:0.75,sunColor:0xd8dee6,sunInt:0.45,sunPos:[-10,26,-8],rain:false,exposure:1.02}
+    cloudy:{bg:0x767f8c,fogNear:38,fogFar:95,hemiSky:0xb8c2cc,hemiGround:0x3c4148,hemiInt:0.75,sunColor:0xd8dee6,sunInt:0.45,sunPos:[-10,26,-8],rain:false,exposure:1.02},
+    snow:{bg:0x131b33,fogNear:42,fogFar:95,hemiSky:0xaec6ee,hemiGround:0x232a3d,hemiInt:0.7,sunColor:0xcfe0ff,sunInt:0.85,sunPos:[-14,28,-10],rain:false,snow:true,exposure:1.18}
   }[w];
   if(!P) return;
   scene.background.set(P.bg);
@@ -828,6 +948,7 @@ function setWeather(w){
   moonLight.intensity=P.sunInt;
   moonLight.position.set(P.sunPos[0],P.sunPos[1],P.sunPos[2]);
   if(RAIN) RAIN.visible=P.rain;
+  if(SNOW) SNOW.visible=!!P.snow;
   renderer.toneMappingExposure=P.exposure;
 }
 document.querySelectorAll('#wx button').forEach(function(b){
