@@ -20,8 +20,8 @@
   <script type="importmap">
     {
       "imports": {
-        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
       }
     }
   </script>
@@ -33,6 +33,7 @@
   <button data-w="sunny">晴天</button>
   <button data-w="cloudy">阴天</button><button data-w="snow">雪夜</button>
 </div>
+  <div id="ld" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#dfe8ff;font-family:sans-serif;font-size:15px;line-height:1.7;background:#0a0e24;z-index:5;text-align:center;padding:0 24px">正在打开小店…<br>首次加载需要下载 3D 引擎，请稍候（慢的话刷新一次就好）</div>
   <script type="module">
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -483,7 +484,7 @@ let SNOW = null;
 
   const bannerTex = framedTex('冰镇冷饮','冷藏饮料 · 冰爽一夏','#2456c8',1024,128,72);
   const bannerMat = new THREE.MeshBasicMaterial({map:bannerTex});
-  const banner = pnl(interior,10,1.25,bannerMat,0,4.3,-7.6,0,0);
+  const banner = pnl(interior,10,1.25,bannerMat,0,4.1,-7.6,0,0);
   reg(banner,2.05);
 
   // 吊牌：三条通道上方分类牌（双面、白边框）
@@ -495,12 +496,12 @@ let SNOW = null;
   const hsFrame = toon(0x3a3f47);
   aisleSigns.forEach((s, i) => {
     const parts = [];
-    parts.push(cyl(interior, 0.02, 0.02, 1.1, hsFrame, s.x - 0.9, 5.75, -4.4));
-    parts.push(cyl(interior, 0.02, 0.02, 1.1, hsFrame, s.x + 0.9, 5.75, -4.4));
+    parts.push(cyl(interior, 0.02, 0.02, 1.96, hsFrame, s.x - 0.9, 5.32, -1.35));
+    parts.push(cyl(interior, 0.02, 0.02, 1.96, hsFrame, s.x + 0.9, 5.32, -1.35));
     const hsTex = framedTex(s.main, s.sub, s.bg, 512, 176, 92);
     const hsMat = new THREE.MeshBasicMaterial({ map: hsTex });
-    parts.push(pnl(interior, 2.6, 0.72, hsMat, s.x, 4.85, -4.36, 0, 0));
-    parts.push(pnl(interior, 2.6, 0.72, hsMat, s.x, 4.85, -4.44, 0, Math.PI));
+    parts.push(pnl(interior, 2.6, 0.72, hsMat, s.x, 3.98, -1.31, 0, 0));
+    parts.push(pnl(interior, 2.6, 0.72, hsMat, s.x, 3.98, -1.39, 0, Math.PI));
     parts.forEach(pt => reg(pt, 2.12 + i * 0.08));
   });
 
@@ -754,7 +755,7 @@ span(20.5, 7.9, -12, 6, 7.4, -4, 0.9);
 
   // 路牌（日式蓝底白字指路牌：白边框 + 商店街 + 駅前通り + 右箭头，正反两面）
   const sign = new THREE.Group();
-  CYL(sign, 0.06, 0.06, 3.3, toon(0x4a5260), 0, 1.65, 0);
+  CYL(sign, 0.09, 0.09, 3.3, toon(0x707a88), 0, 1.65, 0);
   B(sign, 0.5, 0.08, 0.5, toon(0x3c4248), 0, 0.04, 0);
   const sc = document.createElement('canvas'); sc.width = 1024; sc.height = 400;
   const sg = sc.getContext('2d');
@@ -762,13 +763,13 @@ span(20.5, 7.9, -12, 6, 7.4, -4, 0.9);
   sg.strokeStyle = '#ffffff'; sg.lineWidth = 10; sg.strokeRect(20, 20, 984, 360);
   sg.fillStyle = '#ffffff'; sg.textBaseline = 'middle';
   sg.font = 'bold 148px sans-serif'; sg.fillText('商店街', 72, 160);
-  sg.font = '62px sans-serif'; sg.fillText('駅前通り', 76, 302);
+  sg.font = '84px sans-serif'; sg.fillText('駅前通り', 76, 300);
   sg.font = 'bold 200px sans-serif'; sg.fillText('→', 790, 190);
   const signTex2 = new THREE.CanvasTexture(sc);
   const signMat2 = new THREE.MeshBasicMaterial({ map: signTex2 });
-  B(sign, 2.34, 0.94, 0.05, toon(0x2c3540), 0, 2.62, 0);
-  PLN(sign, 2.3, 0.9, signMat2, 0, 2.62, 0.04, 0, 0);
-  PLN(sign, 2.3, 0.9, signMat2, 0, 2.62, -0.04, 0, Math.PI);
+  B(sign, 2.84, 0.94, 0.05, toon(0x2c3540), 0, 2.62, 0);
+  PLN(sign, 2.8, 0.9, signMat2, 0, 2.62, 0.04, 0, 0);
+  PLN(sign, 2.8, 0.9, signMat2, 0, 2.62, -0.04, 0, Math.PI);
   sign.position.set(8.8, 0, 8.8);
   sign.rotation.y = Math.PI / 4;
   scene.add(sign);
@@ -953,6 +954,7 @@ function animate() {
   requestAnimationFrame(animate);
   const dt = Math.min(clock.getDelta(), 0.05);
   const t = clock.elapsedTime;
+  if (!animate.ld) { animate.ld = true; const e = document.getElementById('ld'); if (e) e.remove(); }
   for (const it of ASSEMBLY) {
     const p = Math.min(Math.max((t - it.delay) / 1.4, 0), 1);
     const e = 1 - Math.pow(1 - p, 3);
