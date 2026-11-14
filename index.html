@@ -29,9 +29,7 @@
 <body>
 <div id="wx">
   <button data-w="rain" class="on">雨夜</button>
-  <button data-w="sunset">夕阳</button>
-  <button data-w="sunny">晴天</button>
-  <button data-w="cloudy">阴天</button><button data-w="snow">雪夜</button>
+  <button data-w="snow">雪夜</button>
 </div>
   <div id="ld" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:#dfe8ff;font-family:sans-serif;font-size:15px;line-height:1.7;background:#0a0e24;z-index:5;text-align:center;padding:0 24px">正在打开小店…<br>首次加载需要下载 3D 引擎，请稍候（慢的话刷新一次就好）</div>
   <script type="module">
@@ -981,9 +979,6 @@ window.addEventListener('resize', function() {
 function setWeather(w){
   const P={
     rain:{bg:0x0a0e24,fogNear:55,fogFar:110,hemiSky:0x8fb4ff,hemiGround:0x1a1626,hemiInt:0.55,sunColor:0xa8c4ff,sunInt:0.7,sunPos:[-18,30,-12],rain:true,exposure:1.15},
-    sunset:{bg:0x46305e,fogNear:50,fogFar:105,hemiSky:0xffb37a,hemiGround:0x33222e,hemiInt:0.5,sunColor:0xff9448,sunInt:1.35,sunPos:[-26,9,14],rain:false,exposure:1.1},
-    sunny:{bg:0x8ec9ee,fogNear:70,fogFar:135,hemiSky:0xcfe8ff,hemiGround:0x5a6a4a,hemiInt:0.95,sunColor:0xfff3d6,sunInt:1.7,sunPos:[18,32,12],rain:false,exposure:1.0},
-    cloudy:{bg:0x767f8c,fogNear:38,fogFar:95,hemiSky:0xb8c2cc,hemiGround:0x3c4148,hemiInt:0.75,sunColor:0xd8dee6,sunInt:0.45,sunPos:[-10,26,-8],rain:false,exposure:1.02},
     snow:{bg:0x131b33,fogNear:42,fogFar:95,hemiSky:0xaec6ee,hemiGround:0x232a3d,hemiInt:0.7,sunColor:0xcfe0ff,sunInt:0.85,sunPos:[-14,28,-10],rain:false,snow:true,exposure:1.18}
   }[w];
   if(!P) return;
