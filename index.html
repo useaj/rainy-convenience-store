@@ -492,14 +492,15 @@ let SNOW = null;
     { x: 0, main: '面包', sub: 'BAKERY', bg: '#27ae60' },
     { x: 4.6, main: '日用品', sub: 'DAILY GOODS', bg: '#8e44ad' }
   ];
+  const hsFrame = toon(0x3a3f47);
   aisleSigns.forEach((s, i) => {
     const parts = [];
-    parts.push(cyl(group, 0.02, 0.02, 1.1, frameMat, s.x - 0.9, 5.75, -4.4));
-    parts.push(cyl(group, 0.02, 0.02, 1.1, frameMat, s.x + 0.9, 5.75, -4.4));
+    parts.push(cyl(interior, 0.02, 0.02, 1.1, hsFrame, s.x - 0.9, 5.75, -4.4));
+    parts.push(cyl(interior, 0.02, 0.02, 1.1, hsFrame, s.x + 0.9, 5.75, -4.4));
     const hsTex = framedTex(s.main, s.sub, s.bg, 512, 176, 92);
     const hsMat = new THREE.MeshBasicMaterial({ map: hsTex });
-    parts.push(pnl(group, 2.6, 0.72, hsMat, s.x, 4.85, -4.36, 0, 0));
-    parts.push(pnl(group, 2.6, 0.72, hsMat, s.x, 4.85, -4.44, 0, Math.PI));
+    parts.push(pnl(interior, 2.6, 0.72, hsMat, s.x, 4.85, -4.36, 0, 0));
+    parts.push(pnl(interior, 2.6, 0.72, hsMat, s.x, 4.85, -4.44, 0, Math.PI));
     parts.forEach(pt => reg(pt, 2.12 + i * 0.08));
   });
 
