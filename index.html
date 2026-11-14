@@ -380,12 +380,18 @@ let SNOW = null;
     }
   }
 
-  const light1 = new THREE.PointLight(0xffd9a0,55,20,1.6);
+  const light1 = new THREE.PointLight(0xffd9a0,130,22,1.5);
   light1.position.set(-4,5.2,-3.5);
   scene.add(light1);
-  const light2 = new THREE.PointLight(0xffd9a0,55,20,1.6);
+  const light2 = new THREE.PointLight(0xffd9a0,130,22,1.5);
   light2.position.set(4,5.2,-3.5);
   scene.add(light2);
+  const light3 = new THREE.PointLight(0xffe6bb,110,19,1.5);
+  light3.position.set(0,5.4,-6.0);
+  scene.add(light3);
+  const light4 = new THREE.PointLight(0xffe6bb,85,17,1.5);
+  light4.position.set(0,4.4,-0.6);
+  scene.add(light4);
 
   const shelfMat = toon(0xe8e4da);
   const palette = [0xe74c3c,0xf39c12,0xf1c40f,0x27ae60,0x2980b9,0x9b59b6,0xff7fab,0xf5f5f5];
@@ -414,6 +420,7 @@ let SNOW = null;
         const bz = z1 + 0.45 + i*((aisleLen-0.9)/8);
         const cidx = ((i*7 + ai*3 + layer)%8 + 8)%8;
         const itemMat = toon(palette[cidx]);
+        itemMat.emissive = new THREE.Color(palette[cidx]); itemMat.emissiveIntensity = 0.38;
         const item = box(group,0.4,0.7,0.55,itemMat,ax,ly+0.35,bz);
         item.rotation.x = (i%3)*0.08;
         reg(item,1.55 + ai*0.05 + layer*0.06 + i*0.015);
