@@ -717,12 +717,25 @@ span(-10, 7.95, -6, 15.5, 7.95, 8, 1.2);
 span(15.5, 7.95, 8, 20.5, 7.95, -12, 1.3);
 span(20.5, 7.9, -12, 6, 7.4, -4, 0.9);
 
-  // 路牌
+  // 路牌（日式蓝底白字指路牌：白边框 + 商店街 + 駅前通り + 右箭头，正反两面）
   const sign = new THREE.Group();
-  CYL(sign, 0.05, 0.05, 2.6, toon(0x3c4248), 0, 1.3, 0);
-  const signTex = textTex('商店街', '#ffffff', '#2456c8', 512, 160, 84);
-  const signBoard = PLN(sign, 1.6, 0.45, new THREE.MeshBasicMaterial({ map: signTex, side: THREE.DoubleSide }), 0, 2.45, 0, 0, 0);
+  CYL(sign, 0.06, 0.06, 3.3, toon(0x4a5260), 0, 1.65, 0);
+  B(sign, 0.5, 0.08, 0.5, toon(0x3c4248), 0, 0.04, 0);
+  const sc = document.createElement('canvas'); sc.width = 1024; sc.height = 400;
+  const sg = sc.getContext('2d');
+  sg.fillStyle = '#1450a0'; sg.fillRect(0, 0, 1024, 400);
+  sg.strokeStyle = '#ffffff'; sg.lineWidth = 10; sg.strokeRect(20, 20, 984, 360);
+  sg.fillStyle = '#ffffff'; sg.textBaseline = 'middle';
+  sg.font = 'bold 148px sans-serif'; sg.fillText('商店街', 72, 160);
+  sg.font = '62px sans-serif'; sg.fillText('駅前通り', 76, 302);
+  sg.font = 'bold 200px sans-serif'; sg.fillText('→', 790, 190);
+  const signTex2 = new THREE.CanvasTexture(sc);
+  const signMat2 = new THREE.MeshBasicMaterial({ map: signTex2 });
+  B(sign, 2.34, 0.94, 0.05, toon(0x2c3540), 0, 2.62, 0);
+  PLN(sign, 2.3, 0.9, signMat2, 0, 2.62, 0.04, 0, 0);
+  PLN(sign, 2.3, 0.9, signMat2, 0, 2.62, -0.04, 0, Math.PI);
   sign.position.set(8.8, 0, 8.8);
+  sign.rotation.y = Math.PI / 4;
   scene.add(sign);
   reg(sign, delayReg(7, 10));
 
